@@ -6,7 +6,7 @@
 package dto;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -15,12 +15,12 @@ import java.sql.Date;
 public class Enroll implements Serializable{
     private String enrollId, term, studentId, classId;
     private int year;
-    private Date dateEnrolled;
+    private Timestamp dateEnrolled;
 
     public Enroll() {
     }
 
-    public Enroll(String enrollId, String term, String studentId, String classId, int year, Date dateEnrolled) {
+    public Enroll(String enrollId, String term, String studentId, String classId, int year, Timestamp dateEnrolled) {
         this.enrollId = enrollId;
         this.term = term;
         this.studentId = studentId;
@@ -28,6 +28,8 @@ public class Enroll implements Serializable{
         this.year = year;
         this.dateEnrolled = dateEnrolled;
     }
+
+    
 
     public String getEnrollId() {
         return enrollId;
@@ -69,12 +71,14 @@ public class Enroll implements Serializable{
         this.year = year;
     }
 
-    public Date getDateEnrolled() {
+    public Timestamp getDateEnrolled() {
         return dateEnrolled;
     }
 
-    public void setDateEnrolled(Date dateEnrolled) {
+    public void setDateEnrolled(Timestamp dateEnrolled) {
         this.dateEnrolled = dateEnrolled;
     }
+
+   
     
 }
