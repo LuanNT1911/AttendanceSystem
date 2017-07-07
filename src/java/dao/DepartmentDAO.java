@@ -6,7 +6,7 @@
 package dao;
 
 import dbo.MyConnection;
-import dto.Department;
+import dto.DepartmentDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,8 +81,8 @@ public class DepartmentDAO implements Serializable{
         return false;
     }
 
-    public List<Department> getAllDepartment() throws ClassNotFoundException, SQLException {
-        List<Department> list = new ArrayList<>();
+    public List<DepartmentDTO> getAllDepartment() throws ClassNotFoundException, SQLException {
+        List<DepartmentDTO> list = new ArrayList<>();
         try {
             if (con != null) {
                 String sql = "select * from Department";
@@ -91,7 +91,7 @@ public class DepartmentDAO implements Serializable{
                 if (rs.next()) {
                     String departmentId = rs.getString("departmentId");
                     String name = rs.getString("Name");
-                    Department department = new Department(departmentId, name);
+                    DepartmentDTO department = new DepartmentDTO(departmentId, name);
                     list.add(department);
                 }
             }

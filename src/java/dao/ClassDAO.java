@@ -6,7 +6,7 @@
 package dao;
 
 import dbo.MyConnection;
-import dto.Class;
+import dto.ClassDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ import java.util.List;
  * @author Shou
  */
 public class ClassDAO implements Serializable{
-    public boolean insertClass(Class cl) 
+    public boolean insertClass(ClassDTO cl) 
              throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -82,12 +82,12 @@ public class ClassDAO implements Serializable{
         return false;
     }
     
-    public List<Class> getAll() throws SQLException {
-        List<Class> list = new ArrayList<Class>();
+    public List<ClassDTO> getAll() throws SQLException {
+        List<ClassDTO> list = new ArrayList<ClassDTO>();
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-        Class cl;
+        ClassDTO cl;
         try {
             con = MyConnection.getMyConnection();
             if (con != null) {
@@ -101,7 +101,7 @@ public class ClassDAO implements Serializable{
                     String scheduleId = rs.getString("scheduleId");
                     String teacherId = rs.getString("teacherId");
                     String room = rs.getString("room");
-                    cl = new Class(classId, name, couresId, 
+                    cl = new ClassDTO(classId, name, couresId, 
                             scheduleId, teacherId, room);
                     list.add(cl);
                 }

@@ -6,7 +6,7 @@
 package dao;
 
 import dbo.MyConnection;
-import dto.Enroll;
+import dto.EnrollDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.util.Date;
@@ -71,8 +71,8 @@ public class EnrollDAO implements Serializable {
     }
 
 
-    public List<Enroll> getAllDepartment() throws ClassNotFoundException, SQLException {
-        List<Enroll> list = new ArrayList<>();
+    public List<EnrollDTO> getAllDepartment() throws ClassNotFoundException, SQLException {
+        List<EnrollDTO> list = new ArrayList<>();
         try {
             if (con != null) {
                 String sql = "select * from Department";
@@ -85,7 +85,7 @@ public class EnrollDAO implements Serializable {
                     Timestamp date = rs.getTimestamp("DateEnrolled");
                     String studentId = rs.getString("studentId");
                     String classId = rs.getString("classId");
-                    Enroll enroll = new Enroll(enrollId, term, studentId, classId, year, date);
+                    EnrollDTO enroll = new EnrollDTO(enrollId, term, studentId, classId, year, date);
                     list.add(enroll);
                 }
             }

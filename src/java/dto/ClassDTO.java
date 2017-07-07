@@ -9,61 +9,62 @@ import java.io.Serializable;
 
 /**
  *
- * @author nguye
+ * @author Shou
  */
-public class Class implements Serializable{
-    private String classId, name, courseId, scheduleId, teacherId, room;
+public class ClassDTO implements Serializable{
+    private int classId, courseId, scheduleId, teacherId;
+    private String Name, room;
 
-    public Class() {
+    public ClassDTO() {
     }
 
-    public Class(String classId, String name, String courseId, String scheduleId, String teacherId, String room) {
+    public ClassDTO(int classId, int courseId, int scheduleId, int teacherId, String Name, String room) {
         this.classId = classId;
-        this.name = name;
         this.courseId = courseId;
         this.scheduleId = scheduleId;
         this.teacherId = teacherId;
+        this.Name = Name;
         this.room = room;
     }
 
-    public String getClassId() {
+    public int getClassId() {
         return classId;
     }
 
-    public void setClassId(String classId) {
+    public void setClassId(int classId) {
         this.classId = classId;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCourseId() {
+    public int getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
+    public void setCourseId(int courseId) {
         this.courseId = courseId;
     }
 
-    public String getScheduleId() {
+    public int getScheduleId() {
         return scheduleId;
     }
 
-    public void setScheduleId(String scheduleId) {
+    public void setScheduleId(int scheduleId) {
         this.scheduleId = scheduleId;
     }
 
-    public String getTeacherId() {
+    public int getTeacherId() {
         return teacherId;
     }
 
-    public void setTeacherId(String teacherId) {
+    public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
     }
 
     public String getRoom() {
@@ -73,4 +74,6 @@ public class Class implements Serializable{
     public void setRoom(String room) {
         this.room = room;
     }
+    
+    
 }

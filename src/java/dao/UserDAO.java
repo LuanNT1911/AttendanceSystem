@@ -6,7 +6,7 @@
 package dao;
 
 import dbo.MyConnection;
-import dto.User;
+import dto.UserDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,8 +82,8 @@ public class UserDAO implements Serializable{
         return false;
     }
 
-    public List<User> getAllCourse() throws ClassNotFoundException, SQLException {
-        List<User> list = new ArrayList<>();
+    public List<UserDTO> getAllCourse() throws ClassNotFoundException, SQLException {
+        List<UserDTO> list = new ArrayList<>();
         try {
             if (con != null) {
                 String sql = "select * from Users";
@@ -92,7 +92,7 @@ public class UserDAO implements Serializable{
                 if (rs.next()) {
                     String userId = rs.getString("userId");
                     String roleId = rs.getString("roleId");
-                    User user = new User(userId, roleId);
+                    UserDTO user = new UserDTO(userId, roleId);
                     list.add(user);
                 }
             }

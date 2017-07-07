@@ -6,7 +6,7 @@
 package dao;
 
 import dbo.MyConnection;
-import dto.Schedule;
+import dto.ScheduleDTO;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ import java.util.List;
  * @author Shou
  */
 public class ScheduleDAO implements Serializable{
-    public boolean insertSchedule(Schedule schedule) 
+    public boolean insertSchedule(ScheduleDTO schedule) 
              throws ClassNotFoundException, SQLException {
         Connection con = null;
         PreparedStatement stm = null;
@@ -79,12 +79,12 @@ public class ScheduleDAO implements Serializable{
         return false;
     }
     
-    public List<Schedule> getAll() throws SQLException {
-        List<Schedule> list = new ArrayList<Schedule>();
+    public List<ScheduleDTO> getAll() throws SQLException {
+        List<ScheduleDTO> list = new ArrayList<ScheduleDTO>();
         Connection con = null;
         PreparedStatement stm = null;
         ResultSet rs = null;
-        Schedule schedule;
+        ScheduleDTO schedule;
         try {
             con = MyConnection.getMyConnection();
             if (con != null) {
@@ -97,7 +97,7 @@ public class ScheduleDAO implements Serializable{
                     String Day = rs.getString("Day");
                     Time StartTime = rs.getTime("StartTime");
                     Time EndTime = rs.getTime("EndTime");
-                    schedule = new Schedule(scheduleId, Name, Day, 
+                    schedule = new ScheduleDTO(scheduleId, Name, Day, 
                             StartTime, EndTime);
                     list.add(schedule);
                 }

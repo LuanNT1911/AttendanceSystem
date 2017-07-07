@@ -9,32 +9,36 @@ import java.io.Serializable;
 
 /**
  *
- * @author nguye
+ * @author Shou
  */
-public class Department implements Serializable{
-    private String departmentId, name;
+public class DepartmentDTO implements Serializable{
+    private int departmentId;
+    private String Name;
 
-    public Department() {
+    public DepartmentDTO() {
     }
 
-    public Department(String departmentId, String name) {
+    public DepartmentDTO(int departmentId, String Name) {
         this.departmentId = departmentId;
-        this.name = name;
+        this.Name = Name;
     }
 
-    public String getDepartmentId() {
+    public int getDepartmentId() {
         return departmentId;
     }
 
-    public void setDepartmentId(String departmentId) {
+    public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String Name) {
+        this.Name = Name;
     }
+    
+    
+    
 }
