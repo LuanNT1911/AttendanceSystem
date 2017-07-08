@@ -33,8 +33,8 @@ public class ScheduleDAO implements Serializable{
                 stm = con.prepareStatement(sql);   
                 stm.setString(1, schedule.getName());
                 stm.setString(2, schedule.getDay());
-                stm.setTime(3, schedule.getStartTime());
-                stm.setTime(4, schedule.getEndTime());
+                stm.setString(3, schedule.getStartTime());
+                stm.setString(4, schedule.getEndTime());
                 
                 int row = stm.executeUpdate();
                 if(row > 0) {
@@ -51,6 +51,26 @@ public class ScheduleDAO implements Serializable{
             }
         }
         return false;
+    }
+    
+    public static int update(ScheduleDTO sche){  
+        int status=0;  
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement(  
+                         "update Schedule set Name=?,Day=?,StartTime=?,EndTime=? where scheduleId=?");  
+            ps.setString(1,sche.getName());  
+            ps.setString(2,sche.getDay());  
+            ps.setString(3,sche.getStartTime());  
+            ps.setString(4,sche.getEndTime());  
+            ps.setInt(5,sche.getScheduleId());  
+              
+            status=ps.executeUpdate();  
+              
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return status;  
     }
     
     public boolean deleteSchedule(String scheduleId) throws SQLException {
@@ -79,41 +99,49 @@ public class ScheduleDAO implements Serializable{
         return false;
     }
     
-    public List<ScheduleDTO> getAll() throws SQLException {
-        List<ScheduleDTO> list = new ArrayList<ScheduleDTO>();
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        ScheduleDTO schedule;
-        try {
-            con = MyConnection.getMyConnection();
-            if (con != null) {
-                String sql = "Select * from Schedule";
-                stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    String scheduleId = rs.getString("scheduleId");
-                    String Name = rs.getString("Name");
-                    String Day = rs.getString("Day");
-                    Time StartTime = rs.getTime("StartTime");
-                    Time EndTime = rs.getTime("EndTime");
-                    schedule = new ScheduleDTO(scheduleId, Name, Day, 
-                            StartTime, EndTime);
-                    list.add(schedule);
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+    public static ScheduleDTO getScheduleById(int id){  
+        ScheduleDTO sche = new ScheduleDTO();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Schedule where scheduleId=?");  
+            ps.setInt(1,id);  
+            ResultSet rs=ps.executeQuery();  
+            if(rs.next()){  
+                sche.setScheduleId(rs.getInt(1));  
+                sche.setName(rs.getString(2));  
+                sche.setDay(rs.getString(3));  
+                sche.setStartTime(rs.getString(4));  
+                sche.setEndTime(rs.getString(5));  
+            }  
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return sche;  
+    }
+    
+    public static List<ScheduleDTO> getAllSchedule(){  
+        List<ScheduleDTO> list = new ArrayList<ScheduleDTO>();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Schedule");  
+            ResultSet rs=ps.executeQuery();  
+            while(rs.next()){  
+                ScheduleDTO sche = new ScheduleDTO();  
+                sche.setScheduleId(rs.getInt(1));  
+                sche.setName(rs.getString(2));  
+                sche.setDay(rs.getString(3));  
+                sche.setStartTime(rs.getString(4));  
+                sche.setEndTime(rs.getString(5));  
+                list.add(sche);  
+            }  
+            con.close();  
         }
-        return list;
+        catch(Exception e)
+        {e.printStackTrace();
+        }           
+        return list;  
     }
 }
+

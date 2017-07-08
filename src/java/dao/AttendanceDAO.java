@@ -7,12 +7,9 @@ package dao;
 
 import dbo.MyConnection;
 import dto.AttendanceDTO;
-import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,100 +17,101 @@ import java.util.List;
  *
  * @author Shou
  */
-public class AttendanceDAO implements Serializable{
-    public boolean insertAttendance(AttendanceDTO attendance) 
-             throws ClassNotFoundException, SQLException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = MyConnection.getMyConnection();
-            if (con != null) {
-                String sql = "Insert into Attendance(studentId, classId, DateAttendanced, status)"
-                        + " Values(?,?,?,?)";
-                stm = con.prepareStatement(sql);   
-                stm.setString(1, attendance.getStudentId());
-                stm.setString(2, attendance.getClassId());
-                stm.setString(3, attendance.getDateAttendance());
-                stm.setBoolean(4, attendance.isStatus());
-                
-                int row = stm.executeUpdate();
-                if(row > 0) {
-                    return true;
-                }
-            } 
-        } catch (Exception e) {
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return false;
+public class AttendanceDAO {
+    public static int insert(AttendanceDTO att){  
+        int status=0;  
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement(  
+                         "insert into Attendance(studentId,classId,Status,DateAttendanced) values (?,?,?,?)");  
+            ps.setInt(1,att.getStudentId());  
+            ps.setInt(2,att.getClassId());  
+            ps.setBoolean(3,att.getStatus());  
+            ps.setString(4,att.getDateAttendanced());  
+              
+            status=ps.executeUpdate();  
+              
+            con.close();  
+        }catch(Exception ex){
+            ex.printStackTrace();}  
+          
+        return status;  
+    }
+     
+    public static int update(AttendanceDTO att){  
+        int status=0;  
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement(  
+                         "update Attendance set studentId=?,classId=?,Status=?,DateAttendanced=? where attendanceId=?");  
+            ps.setInt(1,att.getStudentId());  
+            ps.setInt(2,att.getClassId());  
+            ps.setBoolean(3,att.getStatus());  
+            ps.setString(4,att.getDateAttendanced());  
+            ps.setInt(5,att.getAttendanceId());  
+              
+            status=ps.executeUpdate();  
+              
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return status;  
+    }
+     
+    public static int delete(int id){  
+        int status=0;  
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("delete from Attendance where attendanceId=?");  
+            ps.setInt(1,id);  
+            status=ps.executeUpdate();
+              
+            con.close();  
+        }catch(Exception e){e.printStackTrace();}  
+          
+        return status;  
     }
     
-    public boolean deleteAttendance(String attendanceId) throws SQLException {
-        Connection con = null;
-        PreparedStatement stm = null;
-        try {
-            con = MyConnection.getMyConnection();
-            if (con != null) {
-                String sql = "Delete from Attendance where attendanceId = ?";
-                stm = con.prepareStatement(sql);
-                stm.setString(1, attendanceId);
-                int row = stm.executeUpdate();
-                if (row > 0) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return false;
+    public static AttendanceDTO getAttendanceById(int id){  
+        AttendanceDTO att = new AttendanceDTO();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Attendance where attendanceId=?");  
+            ps.setInt(1,id);  
+            ResultSet rs=ps.executeQuery();  
+            if(rs.next()){  
+                att.setAttendanceId(rs.getInt(1));  
+                att.setStudentId(rs.getInt(2));  
+                att.setClassId(rs.getInt(3));  
+                att.setStatus(rs.getBoolean(4));  
+                att.setDateAttendanced(rs.getString(5));  
+            }  
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return att;  
     }
     
-    public List<AttendanceDTO> getAll() throws SQLException {
-        List<AttendanceDTO> list = new ArrayList<AttendanceDTO>();
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        AttendanceDTO att;
-        try {
-            con = MyConnection.getMyConnection();
-            if (con != null) {
-                String sql = "Select * from Attendance";
-                stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    String attendanceId = rs.getString("attendanceId");
-                    String studentId = rs.getString("studentId");
-                    String classId = rs.getString("classId");
-                    String dateAttendance = rs.getString("DateAttendanced");
-                    Boolean status = rs.getBoolean("Status");
-                    att = new AttendanceDTO(attendanceId, studentId, classId, 
-                            dateAttendance, status);
-                    list.add(att);
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return list;
+    public static List<AttendanceDTO> getAllAttendance(){  
+        List<AttendanceDTO> list = new ArrayList<AttendanceDTO>();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Attendance");  
+            ResultSet rs=ps.executeQuery();  
+            while(rs.next()){  
+                AttendanceDTO att = new AttendanceDTO();  
+                att.setAttendanceId(rs.getInt(1));  
+                att.setStudentId(rs.getInt(2));  
+                att.setClassId(rs.getInt(3));  
+                att.setStatus(rs.getBoolean(4));  
+                att.setDateAttendanced(rs.getString(5));  
+                list.add(att);  
+            }  
+            con.close();  
+        }catch(Exception e){e.printStackTrace();}  
+          
+        return list;  
     }
 }

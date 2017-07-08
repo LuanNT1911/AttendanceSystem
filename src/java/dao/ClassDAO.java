@@ -31,9 +31,9 @@ public class ClassDAO implements Serializable{
                         + " Values(?,?,?,?,?)";
                 stm = con.prepareStatement(sql);   
                 stm.setString(1, cl.getName());
-                stm.setString(2, cl.getCourseId());
-                stm.setString(3, cl.getScheduleId());
-                stm.setString(4, cl.getTeacherId());
+                stm.setInt(2, cl.getCourseId());
+                stm.setInt(3, cl.getScheduleId());
+                stm.setInt(4, cl.getTeacherId());
                 stm.setString(5, cl.getRoom());
                 
 
@@ -55,6 +55,26 @@ public class ClassDAO implements Serializable{
         return false;
     }
     
+    public static int update(ClassDTO cl){  
+        int status=0;  
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement(  
+                         "update Schedule set Name=?,courseId=?,scheduleId=?,teacherId=?, room=? where classId=?");  
+            ps.setString(1,cl.getName());  
+            ps.setInt(2,cl.getCourseId());  
+            ps.setInt(3,cl.getScheduleId());  
+            ps.setInt(4,cl.getTeacherId());  
+            ps.setString(4,cl.getRoom());  
+            ps.setInt(5,cl.getClassId());  
+              
+            status=ps.executeUpdate();  
+              
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return status;  
+    }
 
     public boolean deleteClass(String classId) throws SQLException {
         Connection con = null;
@@ -82,42 +102,50 @@ public class ClassDAO implements Serializable{
         return false;
     }
     
-    public List<ClassDTO> getAll() throws SQLException {
-        List<ClassDTO> list = new ArrayList<ClassDTO>();
-        Connection con = null;
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        ClassDTO cl;
-        try {
-            con = MyConnection.getMyConnection();
-            if (con != null) {
-                String sql = "Select * from Class";
-                stm = con.prepareStatement(sql);
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    String classId = rs.getString("classId");
-                    String name = rs.getString("name");
-                    String couresId = rs.getString("courseId");
-                    String scheduleId = rs.getString("scheduleId");
-                    String teacherId = rs.getString("teacherId");
-                    String room = rs.getString("room");
-                    cl = new ClassDTO(classId, name, couresId, 
-                            scheduleId, teacherId, room);
-                    list.add(cl);
-                }
-            }
-        } catch (Exception e) {
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (stm != null) {
-                stm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
+    public static ClassDTO getClassById(int id){  
+        ClassDTO cl = new ClassDTO();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Class where classId=?");  
+            ps.setInt(1,id);  
+            ResultSet rs=ps.executeQuery();  
+            if(rs.next()){  
+                cl.setClassId(rs.getInt(1));  
+                cl.setName(rs.getString(2));  
+                cl.setCourseId(rs.getInt(3));  
+                cl.setScheduleId(rs.getInt(4));  
+                cl.setTeacherId(rs.getInt(5));  
+                cl.setRoom(rs.getString(5));  
+            }  
+            con.close();  
+        }catch(Exception ex){ex.printStackTrace();}  
+          
+        return cl;  
+    }
+    
+    public static List<ClassDTO> getAllClass(){  
+        List<ClassDTO> list = new ArrayList<ClassDTO>();  
+          
+        try{  
+            Connection con=MyConnection.getMyConnection();  
+            PreparedStatement ps=con.prepareStatement("select * from Class");  
+            ResultSet rs=ps.executeQuery();  
+            while(rs.next()){  
+                ClassDTO cl = new ClassDTO();  
+                cl.setClassId(rs.getInt(1));  
+                cl.setName(rs.getString(2));  
+                cl.setCourseId(rs.getInt(3));  
+                cl.setScheduleId(rs.getInt(4));  
+                cl.setTeacherId(rs.getInt(5));  
+                cl.setRoom(rs.getString(5));
+                list.add(cl);  
+            }  
+            con.close();  
         }
-        return list;
+        catch(Exception e)
+        {e.printStackTrace();
+        }           
+        return list;  
     }
 }
